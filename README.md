@@ -18,7 +18,7 @@ Este projeto visa resolver esse problema centralizando tudo em uma plataforma on
 
 * **📝 Abertura de Chamados:** Interface para registrar solicitações detalhando o problema (TI, Manutenção Predial, etc).
 * **👀 Acompanhamento em Tempo Real:** O solicitante pode ver se o chamado está "Pendente", "Em Andamento" ou "Concluído".
-* **asd Histórico de Solicitações:** Registro completo de todos os pedidos antigos para fins de auditoria e controle.
+* **👨‍💻 Histórico de Solicitações:** Registro completo de todos os pedidos antigos para fins de auditoria e controle.
 
 ## 🛠️ Tecnologias Utilizadas
 
