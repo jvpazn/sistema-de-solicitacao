@@ -1,16 +1,13 @@
 package br.edu.ifpe.sistema_de_solicitacao.Controller;
 
-import br.edu.ifpe.sistema_de_solicitacao.DAO.UsuarioDAO; //
-import br.edu.ifpe.sistema_de_solicitacao.Model.Usuario; //
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import br.edu.ifpe.sistema_de_solicitacao.DAO.UsuarioDAO;
+import br.edu.ifpe.sistema_de_solicitacao.Model.Usuario;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
-@RestController
-@RequestMapping("/api/usuarios")
+@Controller
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
     private final UsuarioDAO usuarioDAO;
@@ -19,30 +16,26 @@ public class UsuarioController {
         this.usuarioDAO = usuarioDAO;
     }
 
+ 
     @GetMapping
-    public List<Usuario> listarTodos() {
-        return usuarioDAO.findAll();
+    public String listarTodos(Model model) {
+        model.addAttribute("usuarios", usuarioDAO.findAll());
+        return "usuarios"; 
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
-        Optional<Usuario> usuario = usuarioDAO.findById(id);
-        return usuario.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+
+    @PostMapping("/criar")
+    public String criar(@ModelAttribute Usuario usuario) {
+        usuarioDAO.save(usuario);
+        return "redirect:/usuarios"; 
     }
 
-    @PostMapping
-    public ResponseEntity<Usuario> criar(@RequestBody Usuario usuario) {
-        Usuario novoUsuario = usuarioDAO.save(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+   
+    @GetMapping("/deletar/{id}")
+    public String deletar(@PathVariable Long id) {
         if (usuarioDAO.existsById(id)) {
             usuarioDAO.deleteById(id);
-            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.notFound().build();
+        return "redirect:/usuarios";
     }
 }
