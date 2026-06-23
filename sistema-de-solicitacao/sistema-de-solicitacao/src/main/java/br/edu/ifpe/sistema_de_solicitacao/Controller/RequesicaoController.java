@@ -1,16 +1,13 @@
 package br.edu.ifpe.sistema_de_solicitacao.Controller;
 
-import br.edu.ifpe.sistema_de_solicitacao.DAO.RequesicaoDAO; //
-import br.edu.ifpe.sistema_de_solicitacao.Model.Requesicao; //
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import br.edu.ifpe.sistema_de_solicitacao.DAO.RequesicaoDAO;
+import br.edu.ifpe.sistema_de_solicitacao.Model.Requesicao;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
-@RestController
-@RequestMapping("/api/requesicoes")
+@Controller
+@RequestMapping("/requisicoes")
 public class RequesicaoController {
 
     private final RequesicaoDAO requesicaoDAO;
@@ -19,42 +16,36 @@ public class RequesicaoController {
         this.requesicaoDAO = requesicaoDAO;
     }
 
+
     @GetMapping
-    public List<Requesicao> listarTodas() {
-        return requesicaoDAO.findAll();
+    public String listarTodas(Model model) {
+        model.addAttribute("requisicoes", requesicaoDAO.findAll());
+        return "requisicoes"; 
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Requesicao> buscarPorId(@PathVariable Long id) {
-        Optional<Requesicao> requesicao = requesicaoDAO.findById(id);
-        if (requesicao.isPresent()) {
-            return ResponseEntity.ok(requesicao.get());
+
+    @PostMapping("/criar")
+    public String criar(@ModelAttribute Requesicao requesicao) {
+        requesicaoDAO.save(requesicao);
+        return "redirect:/requisicoes";
+    }
+
+ 
+    @PostMapping("/atualizar/{id}")
+    public String atualizar(@PathVariable Long id, @ModelAttribute Requesicao requesicaoAtualizada) {
+        if (requesicaoDAO.existsById(id)) {
+            requesicaoAtualizada.setId(id);
+            requesicaoDAO.save(requesicaoAtualizada);
         }
-        return ResponseEntity.notFound().build();
+        return "redirect:/requisicoes";
     }
 
-    @PostMapping
-    public ResponseEntity<Requesicao> criar(@RequestBody Requesicao requesicao) {
-        Requesicao novaRequesicao = requesicaoDAO.save(requesicao);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novaRequesicao);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Requesicao> atualizar(@PathVariable Long id, @RequestBody Requesicao requesicaoAtualizada) {
-        if (!requesicaoDAO.existsById(id)) {
-            return ResponseEntity.notFound().build();
+    
+    @GetMapping("/deletar/{id}")
+    public String deletar(@PathVariable Long id) {
+        if (requesicaoDAO.existsById(id)) {
+            requesicaoDAO.deleteById(id);
         }
-        requesicaoAtualizada.setId(id);
-        Requesicao salva = requesicaoDAO.save(requesicaoAtualizada);
-        return ResponseEntity.ok(salva);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        if (!requesicaoDAO.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        requesicaoDAO.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/requisicoes";
     }
 }
