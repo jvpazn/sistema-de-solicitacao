@@ -22,10 +22,15 @@ Este projeto visa resolver esse problema centralizando tudo em uma plataforma on
 
 ## 🛠️ Tecnologias Utilizadas
 
-* **Linguagem:** Java 17+
-* **Framework:** Spring Boot 3
-* **Gerenciamento de Dependências:** Maven 
-* **Banco de Dados:** Mysql
+* **Linguagem:** JavaScript
+* **Framework:** React Native
+* **Gerenciamento de Dependências:** npm
+* **API:** REST API desenvolvida em Java + Spring Boot
 
 ### Pré-requisitos
-* Java JDK 17 ou superior instalado.
+
+* **Node.js 18 ou superior**
+* **npm**
+* **React Native** configurado no ambiente de desenvolvimento
+* A **API Spring Boot** deve estar em execução para que o aplicativo consiga realizar as requisições.
+
