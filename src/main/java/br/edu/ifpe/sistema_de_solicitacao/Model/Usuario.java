@@ -1,7 +1,20 @@
 package br.edu.ifpe.sistema_de_solicitacao.Model;
 
-import jakarta.persistence.*;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "usuario")
@@ -28,11 +41,11 @@ public class Usuario {
     @JoinColumn(name = "instituicao_id", nullable = false)
     private instituicao instituicao;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario")
     private List<Requesicao> requesicoes;
 
     public Usuario() {}
-
 
     public Usuario(String nome, String senha, String matricula, instituicao instituicao, List<Requesicao> requesicoes) {
         this.nome = nome;
@@ -41,7 +54,6 @@ public class Usuario {
         this.instituicao = instituicao;
         this.requesicoes = requesicoes;
     }
-
 
     public String getNome() {
         return this.nome;
